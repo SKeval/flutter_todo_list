@@ -16,6 +16,8 @@ class _HomeState extends State<Home> {
 
   int selectedTask = -1;
 
+  List<String> listStudent = ["raj", 'Keval', 'bHemal', "Kisu", 'Dharuv'];
+
   //snack bar
 
   showMySnackbar(BuildContext context, String msg, {Color c = Colors.red}) {
@@ -39,146 +41,156 @@ class _HomeState extends State<Home> {
         title: const Text("Example Todo"),
       ),
       body: Column(
-        children: [
-          Expanded(
-            child: ListView.separated(
-              itemCount: listOfTodo.length,
-              itemBuilder: (context, index) {
-                bool isChecked = false;
+        //important
+        children: listStudent
+            .map((e) => ListTile(
+                  title: Text(e),
+                ))
+            .toList(),
+      ),
+    );
+  }
 
-                if (listIsDone.contains(listOfTodo[index])) {
-                  isChecked = true;
-                }
+  Widget todoBody() {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.separated(
+            itemCount: listOfTodo.length,
+            itemBuilder: (context, index) {
+              bool isChecked = false;
 
-                return Card(
-                  child: ListTile(
-                    onTap: () {
-                      print('tile clicked');
-                      if (listIsDone.contains(listOfTodo[index])) {
-                        listIsDone.remove(listOfTodo[index]);
-                      } else {
-                        listIsDone.add(listOfTodo[index]);
-                        showMySnackbar(context, 'Task Done', c: Colors.green);
-                      }
-                      setState(() {
-                        print('index : $index');
-                        print(listIsDone);
-                      });
-                    },
-                    title: Text(
-                      listOfTodo[index],
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    leading: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedTask = index;
-                            todoCont.text = listOfTodo[selectedTask];
-                          });
-                        },
-                        icon: const Icon(Icons.edit)),
-                    trailing: SizedBox(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          Checkbox(value: isChecked, onChanged: (val) {}),
-                          IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  listIsDone.remove(listOfTodo[index]);
-                                  listOfTodo.removeAt(index);
-                                  print('index : $index');
-                                  print(listIsDone);
+              if (listIsDone.contains(listOfTodo[index])) {
+                isChecked = true;
+              }
 
-                                  showMySnackbar(context, 'Task Deleted !');
-                                });
-                              },
-                              icon: Icon(Icons.delete))
-                        ],
-                      ),
-                    ),
+              return Card(
+                child: ListTile(
+                  onTap: () {
+                    print('tile clicked');
+                    if (listIsDone.contains(listOfTodo[index])) {
+                      listIsDone.remove(listOfTodo[index]);
+                    } else {
+                      listIsDone.add(listOfTodo[index]);
+                      showMySnackbar(context, 'Task Done', c: Colors.green);
+                    }
+                    setState(() {
+                      print('index : $index');
+                      print(listIsDone);
+                    });
+                  },
+                  title: Text(
+                    listOfTodo[index],
+                    style: const TextStyle(fontSize: 18),
                   ),
-                  // child: Container(
-                  //   padding: EdgeInsets.all(18),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Text(
-                  //         listOfTodo[index],
-                  //         style: const TextStyle(fontSize: 18),
-                  //       ),
-                  //       Checkbox(
-                  //           value: isChecked,
-                  //           onChanged: (val) {
-                  //             if (listIsDone.contains(listOfTodo[index])) {
-                  //               listIsDone.remove(listOfTodo[index]);
-                  //             } else {
-                  //               listIsDone.add(listOfTodo[index]);
-                  //             }
-                  //             setState(() {
-                  //               print('index : $index');
-                  //               print(listIsDone);
-                  //             });
-                  //           })
-                  //     ],
-                  //   ),
-                  // ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Container(
-                  height: 6,
-                );
-              },
-            ),
-            // ListView(
-            //   //shrinkWrap: true,
-            //   children: [
-            //     Text(listOfTodo[0]),
-            //     Text(listOfTodo[1]),
-            //     Text(listOfTodo[2]),
-            //   ],
-            // ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                TextField(
-                  controller: todoCont,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Todo',
+                  leading: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          selectedTask = index;
+                          todoCont.text = listOfTodo[selectedTask];
+                        });
+                      },
+                      icon: const Icon(Icons.edit)),
+                  trailing: SizedBox(
+                    width: 100,
+                    child: Row(
+                      children: [
+                        Checkbox(value: isChecked, onChanged: (val) {}),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                listIsDone.remove(listOfTodo[index]);
+                                listOfTodo.removeAt(index);
+                                print('index : $index');
+                                print(listIsDone);
+
+                                showMySnackbar(context, 'Task Deleted !');
+                              });
+                            },
+                            icon: Icon(Icons.delete))
+                      ],
+                    ),
                   ),
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (selectedTask != -1) {
-                        //edit / update
+                // child: Container(
+                //   padding: EdgeInsets.all(18),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text(
+                //         listOfTodo[index],
+                //         style: const TextStyle(fontSize: 18),
+                //       ),
+                //       Checkbox(
+                //           value: isChecked,
+                //           onChanged: (val) {
+                //             if (listIsDone.contains(listOfTodo[index])) {
+                //               listIsDone.remove(listOfTodo[index]);
+                //             } else {
+                //               listIsDone.add(listOfTodo[index]);
+                //             }
+                //             setState(() {
+                //               print('index : $index');
+                //               print(listIsDone);
+                //             });
+                //           })
+                //     ],
+                //   ),
+                // ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Container(
+                height: 6,
+              );
+            },
+          ),
+          // ListView(
+          //   //shrinkWrap: true,
+          //   children: [
+          //     Text(listOfTodo[0]),
+          //     Text(listOfTodo[1]),
+          //     Text(listOfTodo[2]),
+          //   ],
+          // ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              TextField(
+                controller: todoCont,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: 'Enter Todo',
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    if (selectedTask != -1) {
+                      //edit / update
 
-                        setState(() {
-                          listOfTodo[selectedTask] = todoCont.text.trim();
-                          todoCont.clear();
-                          selectedTask = -1;
-                        });
-                      } else {
-                        //add new one
-                        showMySnackbar(context, 'Task Added!', c: Colors.green);
+                      setState(() {
+                        listOfTodo[selectedTask] = todoCont.text.trim();
+                        todoCont.clear();
+                        selectedTask = -1;
+                      });
+                    } else {
+                      //add new one
+                      showMySnackbar(context, 'Task Added!', c: Colors.green);
 
-                        setState(() {
-                          print(todoCont.text.trim());
-                          listOfTodo.add(todoCont.text.trim());
-                          todoCont.clear();
-                        });
-                      }
-                    },
-                    child:
-                        Text(selectedTask != -1 ? 'Update Task' : 'Add Task'))
-              ],
-            ),
-          )
-        ],
-      ),
+                      setState(() {
+                        print(todoCont.text.trim());
+                        listOfTodo.add(todoCont.text.trim());
+                        todoCont.clear();
+                      });
+                    }
+                  },
+                  child: Text(selectedTask != -1 ? 'Update Task' : 'Add Task'))
+            ],
+          ),
+        )
+      ],
     );
   }
 }
