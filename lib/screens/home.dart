@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_todo_list/model/taskmodel.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -10,14 +13,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   TextEditingController todoCont = TextEditingController();
 
-  List<String> listOfTodo = [];
-
-  List<String> listIsDone = [];
-
   int selectedTask = -1;
 
-  List<String> listStudent = ["raj", 'Keval', 'bHemal', "Kisu", 'Dharuv'];
-
+  //List<String> listStudent = ["raj", 'Keval', 'bHemal', "Kisu", 'Dharuv'];
+  List<TaskModel> listTask = [];
   //snack bar
 
   showMySnackbar(BuildContext context, String msg, {Color c = Colors.red}) {
@@ -26,6 +25,31 @@ class _HomeState extends State<Home> {
       content: Text('$msg'),
       backgroundColor: c,
     ));
+  }
+
+  // int count = 1;
+  // Timer? timer;
+
+  // showTimer() {
+  //   timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     setState(() {
+  //       count++;
+  //     });
+
+  //     if (count > 10) {
+  //       timer.cancel();
+  //     }
+  //   });
+  // }
+
+  String getCurrentDate() {
+    String str = DateTime.now().toString();
+    return str.split(' ')[0];
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -37,30 +61,62 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Example Todo"),
+        appBar: AppBar(
+          title: const Text("Example Todo"),
+        ),
+        body: todoBody()
+
+        /*
+       Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  color: Colors.blueGrey[600],
+                  height: 100,
+                  child: Center(
+                      child: Text(
+                    "$count",
+                    style: TextStyle(fontSize: 26, color: Colors.white),
+                  )),
+                ),
+              ),
+            ],
+          ),
+          ElevatedButton(
+            onPressed: () {
+              timer!.cancel();
+            },
+            child: Text('Stop Timer'),
+          )
+        ],
       ),
-      body: Column(
-        //important
+      */
+        );
+  }
+
+  /*
+ //important
         children: listStudent
             .map((e) => ListTile(
                   title: Text(e),
                 ))
             .toList(),
       ),
-    );
-  }
+
+  */
 
   Widget todoBody() {
     return Column(
       children: [
         Expanded(
           child: ListView.separated(
-            itemCount: listOfTodo.length,
+            itemCount: listTask.length,
             itemBuilder: (context, index) {
               bool isChecked = false;
 
-              if (listIsDone.contains(listOfTodo[index])) {
+              if (listTask[index].ischeck) {
                 isChecked = true;
               }
 
@@ -68,26 +124,30 @@ class _HomeState extends State<Home> {
                 child: ListTile(
                   onTap: () {
                     print('tile clicked');
-                    if (listIsDone.contains(listOfTodo[index])) {
-                      listIsDone.remove(listOfTodo[index]);
+                    if (listTask[index].ischeck) {
+                      listTask[index].ischeck = false;
                     } else {
-                      listIsDone.add(listOfTodo[index]);
+                      listTask[index].ischeck = true;
                       showMySnackbar(context, 'Task Done', c: Colors.green);
                     }
                     setState(() {
                       print('index : $index');
-                      print(listIsDone);
+                      print(listTask.toString());
                     });
                   },
                   title: Text(
-                    listOfTodo[index],
+                    listTask[index].title,
                     style: const TextStyle(fontSize: 18),
+                  ),
+                  subtitle: Text(
+                    listTask[index].dateoftodo,
+                    style: const TextStyle(fontSize: 16),
                   ),
                   leading: IconButton(
                       onPressed: () {
                         setState(() {
                           selectedTask = index;
-                          todoCont.text = listOfTodo[selectedTask];
+                          todoCont.text = listTask[selectedTask].title;
                         });
                       },
                       icon: const Icon(Icons.edit)),
@@ -95,14 +155,19 @@ class _HomeState extends State<Home> {
                     width: 100,
                     child: Row(
                       children: [
-                        Checkbox(value: isChecked, onChanged: (val) {}),
+                        Checkbox(
+                            value: isChecked,
+                            onChanged: (val) {
+                              //code to change
+                            }),
+
+                        //code to delete
                         IconButton(
                             onPressed: () {
                               setState(() {
-                                listIsDone.remove(listOfTodo[index]);
-                                listOfTodo.removeAt(index);
+                                listTask.removeAt(index);
                                 print('index : $index');
-                                print(listIsDone);
+                                print(listTask.toString());
 
                                 showMySnackbar(context, 'Task Deleted !');
                               });
@@ -171,7 +236,7 @@ class _HomeState extends State<Home> {
                       //edit / update
 
                       setState(() {
-                        listOfTodo[selectedTask] = todoCont.text.trim();
+                        listTask[selectedTask].title = todoCont.text.trim();
                         todoCont.clear();
                         selectedTask = -1;
                       });
@@ -181,7 +246,10 @@ class _HomeState extends State<Home> {
 
                       setState(() {
                         print(todoCont.text.trim());
-                        listOfTodo.add(todoCont.text.trim());
+                        listTask.add(TaskModel(
+                            title: todoCont.text.trim(),
+                            dateoftodo: getCurrentDate()));
+
                         todoCont.clear();
                       });
                     }
