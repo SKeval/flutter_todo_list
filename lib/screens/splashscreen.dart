@@ -33,7 +33,7 @@ class _SplashsCreenState extends State<SplashsCreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
                 height: 100,
                 width: 100,
                 child: Image.asset("assets/img/todo.png")),

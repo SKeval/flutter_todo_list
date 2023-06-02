@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_list/screens/home.dart';
 import 'package:flutter_todo_list/screens/splashscreen.dart';
 
 void main() {

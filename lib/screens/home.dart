@@ -1,4 +1,4 @@
-import 'dart:async';
+// ignore_for_file: avoid_print, duplicate_ignore
 
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_list/model/taskmodel.dart';
@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
   showMySnackbar(BuildContext context, String msg, {Color c = Colors.red}) {
     //snackbar
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('$msg'),
+      content: Text(msg),
       backgroundColor: c,
     ));
   }
@@ -123,6 +123,7 @@ class _HomeState extends State<Home> {
               return Card(
                 child: ListTile(
                   onTap: () {
+                    // ignore: avoid_print
                     print('tile clicked');
                     if (listTask[index].ischeck) {
                       listTask[index].ischeck = false;
@@ -172,7 +173,7 @@ class _HomeState extends State<Home> {
                                 showMySnackbar(context, 'Task Deleted !');
                               });
                             },
-                            icon: Icon(Icons.delete))
+                            icon: const Icon(Icons.delete))
                       ],
                     ),
                   ),
@@ -226,7 +227,7 @@ class _HomeState extends State<Home> {
               TextField(
                 controller: todoCont,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter Todo',
                 ),
               ),
